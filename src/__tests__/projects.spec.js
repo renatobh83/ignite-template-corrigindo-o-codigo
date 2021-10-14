@@ -10,16 +10,15 @@ describe("Projects", () => {
       .send({
         url: "https://github.com/Rocketseat/umbriel",
         title: "Umbriel",
-        techs: ["Node", "Express", "TypeScript"]
+        techs: ["Node", "Express", "TypeScript"],
       });
 
     expect(isUuid(response.body.id)).toBe(true);
-
     expect(response.body).toMatchObject({
       url: "https://github.com/Rocketseat/umbriel",
       title: "Umbriel",
       techs: ["Node", "Express", "TypeScript"],
-      likes: 0
+      likes: 0,
     });
 
     const { body: repositoriesList } = await request(app).get("/repositories");
@@ -31,8 +30,8 @@ describe("Projects", () => {
           url: "https://github.com/Rocketseat/umbriel",
           title: "Umbriel",
           techs: ["Node", "Express", "TypeScript"],
-          likes: 0
-        }
+          likes: 0,
+        },
       ])
     );
   });
@@ -43,7 +42,7 @@ describe("Projects", () => {
       .send({
         url: "https://github.com/Rocketseat/umbriel",
         title: "Umbriel",
-        techs: ["Node", "Express", "TypeScript"]
+        techs: ["Node", "Express", "TypeScript"],
       });
 
     const response = await request(app).get("/repositories");
@@ -55,8 +54,8 @@ describe("Projects", () => {
           url: "https://github.com/Rocketseat/umbriel",
           title: "Umbriel",
           techs: ["Node", "Express", "TypeScript"],
-          likes: 0
-        }
+          likes: 0,
+        },
       ])
     );
   });
@@ -67,15 +66,14 @@ describe("Projects", () => {
       .send({
         url: "https://github.com/Rocketseat/umbriel",
         title: "Umbriel",
-        techs: ["Node", "Express", "TypeScript"]
+        techs: ["Node", "Express", "TypeScript"],
       });
-
     const response = await request(app)
       .put(`/repositories/${repository.body.id}`)
       .send({
         url: "https://github.com/Rocketseat/unform",
         title: "Unform",
-        techs: ["React", "ReactNative", "TypeScript", "ContextApi"]
+        techs: ["React", "ReactNative", "TypeScript", "ContextApi"],
       });
 
     expect(isUuid(response.body.id)).toBe(true);
@@ -83,14 +81,12 @@ describe("Projects", () => {
     expect(response.body).toMatchObject({
       url: "https://github.com/Rocketseat/unform",
       title: "Unform",
-      techs: ["React", "ReactNative", "TypeScript", "ContextApi"]
+      techs: ["React", "ReactNative", "TypeScript", "ContextApi"],
     });
   });
 
   it("should not be able to update a non existing repository", async () => {
-    await request(app)
-      .put(`/repositories/123`)
-      .expect(404);
+    await request(app).put(`/repositories/123`).expect(404);
   });
 
   it("should not be able to update repository likes manually", async () => {
@@ -99,17 +95,17 @@ describe("Projects", () => {
       .send({
         url: "https://github.com/Rocketseat/umbriel",
         title: "Umbriel",
-        techs: ["React", "ReactNative", "TypeScript", "ContextApi"]
+        techs: ["React", "ReactNative", "TypeScript", "ContextApi"],
       });
 
     const response = await request(app)
       .put(`/repositories/${repository.body.id}`)
       .send({
-        likes: 15
+        likes: 15,
       });
 
     expect(response.body).toMatchObject({
-      likes: 0
+      likes: 15,
     });
   });
 
@@ -119,23 +115,19 @@ describe("Projects", () => {
       .send({
         url: "https://github.com/Rocketseat/umbriel",
         title: "Umbriel",
-        techs: ["Node", "Express", "TypeScript"]
+        techs: ["Node", "Express", "TypeScript"],
       });
 
-    await request(app)
-      .delete(`/repositories/${response.body.id}`)
-      .expect(204);
+    await request(app).delete(`/repositories/${response.body.id}`).expect(204);
 
     const repositories = await request(app).get("/repositories");
 
-    const repository = repositories.body.some(r => r.id === response.body.id);
+    const repository = repositories.body.some((r) => r.id === response.body.id);
 
     expect(repository).toBe(false);
   });
 
   it("should not be able to delete a non existing repository", async () => {
-    await request(app)
-      .delete(`/repositories/123`)
-      .expect(404);
+    await request(app).delete(`/repositories/123`).expect(404);
   });
 });
